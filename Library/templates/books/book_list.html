@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block start %}
+<style>
+	thead th,
+	tbody th {
+			color: #fff;
+	}
+
+	tbody td {
+			font-weight: 500;
+			color: rgba(255,255,255,.65);
+	}
+
+	.card {
+			border-radius: .5rem;
+	}
+
+	p, label {
+		color: azure;
+		font-size: 20px;
+	}
+
+	label {
+		margin: 5px 0px;
+	}
+
+	.table-responsive {
+		max-height: 500px;
+	}
+
+	thead {
+		position: sticky;
+		top: 0;
+	}
+
+	.accordion {
+			--bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+			--bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+	}
+</style>
+
+<div class="accordion container mt-5" id="accordionPanelsStayOpenExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="background-color: #590442; padding-bottom: 5px;">
+        <p>Search for Books</p>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+        <div class="mask d-flex align-items-center h-100">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-12">
+                <div class="card bg-dark shadow-2-strong">
+                  <div class="card-body">
+                    <form>
+                      <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" value="{{title}}" name="title" class="form-control" placeholder="Enter Title">  
+                      </div>
+                      <div class="form-group">
+                        <label>Authors</label>
+                        <input type="text" value="{{authors}}" name="authors" class="form-control" placeholder="Enter Authors">  
+                      </div>
+                      <div class="form-group">
+                        <label>Publisher</label>
+                        <input type="text" value="{{publisher}}" name="publisher" class="form-control" placeholder="Enter Publisher">  
+                      </div>
+                      <div class="form-group">
+                        <label>ISBN</label>
+                        <input type="text" value="{{isbn}}" name="isbn" class="form-control" placeholder="Enter ISBN">  
+                      </div>
+                      <button type="submit" class="btn btn-success" style="margin-top: 20px;">Search 🔎</button>  
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo" style="background-color: #590442; padding-bottom: 5px;">
+        <p>Add Books</p>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <div class="mask d-flex align-items-center h-100">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-12">
+                <div class="card bg-dark shadow-2-strong">
+                  <div class="card-body">
+                    <form method="post">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="Enter Title">  
+                      </div>
+                      <div class="form-group">
+                        <label>Authors</label>
+                        <input type="text" name="authors" class="form-control" placeholder="Enter Authors">  
+                      </div>
+                      <div class="form-group">
+                        <label>Publisher</label>
+                        <input type="text" name="publisher" class="form-control" placeholder="Enter Publisher">  
+                      </div>
+                      <div class="form-group">
+                        <label>ISBN</label>
+                        <input type="text" name="isbn" class="form-control" placeholder="Enter ISBN">  
+                      </div>
+                      <div class="form-group">
+                        <label>Number of books</label>
+                        <input type="number" name="count" value="1" class="form-control" placeholder="Enter number of books">  
+                      </div>
+                      <button type="submit" class="btn btn-warning" style="margin-top: 20px;">Add ➕</button>  
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mask d-flex align-items-center h-100" style="margin: 50px 0px;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card bg-dark shadow-2-strong">
+          <div class="card-body">
+            <div class="table-responsive">
+              <p style=" font-size: 40px;">List of Books</p>
+              <table class="table table-dark table-bordered mb-0 align-middle">
+                <thead class="align-middle">
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">bookID</th>
+                    <th scope="col">Authors</th>
+                    <th scope="col">Average Rating</th>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">ISBN13</th>
+                    <th scope="col">Language Code</th>
+                    <th scope="col">No. of Pages</th>
+                    <th scope="col">Ratings Count</th>
+                    <th scope="col">Text Reviews</th>
+                    <th scope="col">Publication Date</th>
+                    <th scope="col">Publisher</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Delete</th>
+                    <th scope="col">Update</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  {% for book in books %}
+                  <tr>
+                    <td scope="row">{{ book.title }}</td>
+                    <td>{{ book.bookID }}</td>
+                    <td>{{ book.authors }}</td>
+                    <td>{{ book.average_rating }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.isbn13 }}</td>
+                    <td>{{ book.language_code }}</td>
+                    <td>{{ book.num_pages }}</td>
+                    <td>{{ book.ratings_count }}</td>
+                    <td>{{ book.text_reviews_count }}</td>
+                    <td>{{ book.publication_date }}</td>
+                    <td>{{ book.publisher }}</td>
+                    <td>{{ book.stock }}</td>
+                    <td >
+                      <a href="/delete-book/{{book.bookID}}" class="btn btn-danger">Delete</button>
+                    </td>
+                    <td>
+                      <a href="/update-book/{{book.bookID}}" class="btn btn-primary">Update</button>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

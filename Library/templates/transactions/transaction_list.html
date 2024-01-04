@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block start %}
+<style>
+	thead th,
+	tbody th {
+			color: #fff;
+	}
+
+	tbody td {
+			font-weight: 500;
+			color: rgba(255,255,255,.65);
+	}
+
+	.card {
+			border-radius: .5rem;
+	}
+
+	p, label {
+		color: azure;
+		font-size: 20px;
+	}
+
+	label {
+		margin: 5px 0px;
+	}
+
+	.table-responsive {
+		max-height: 500px;
+	}
+
+	thead {
+		position: sticky;
+		top: 0;
+	}
+
+	.accordion {
+			--bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+			--bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+	}
+</style>
+
+<div class="accordion container mt-5" id="accordionPanelsStayOpenExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="background-color: #590442; padding-bottom: 5px;">
+        <p>Book Issue</p>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+        <div class="mask d-flex align-items-center h-100">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-12">
+                <div class="card bg-dark shadow-2-strong">
+                  <div class="card-body">
+                    <form method="post" action="/issue-book/">
+											{% csrf_token %}
+											<div class="form-group">
+                        <label>BookID</label>
+                        <select name="bookID" required class="form-control">
+                          <option hidden disabled selected value>Select Book ID</option>
+                          {% for book in available_books %}
+                            <option value="{{book.bookID}}">{{book.bookID}}:- {{book.title}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+											<div class="form-group">
+                        <label>Member Email</label>
+                        <select name="email" required class="form-control">
+                          <option hidden disabled selected value>Select Member Email</option>
+                          {% for member in valid_members %}
+                            <option value="{{member.email}}">{{member.email}}:- {{member.first_name}} {{member.last_name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+											<div class="form-group">
+                        <label>Rent Fee</label>
+                        <input type="number" required name="rent" class="form-control" placeholder="Enter rent fee">  
+                      </div>
+                      <button type="submit" class="btn btn-success" style="margin-top: 20px;">Issue</button>  
+										</form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo" style="background-color: #590442; padding-bottom: 5px;">
+        <p>Book Return</p>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <div class="mask d-flex align-items-center h-100">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-12">
+                <div class="card bg-dark shadow-2-strong">
+                  <div class="card-body">
+                    <form method="post" action="/return-book/">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label>Open Transactions</label>
+                        <!-- <input type="text" required name="bookID" class="form-control" placeholder="Enter bookID">   -->
+                        <select name="transactionID" required class="form-control">
+                          <option hidden disabled selected value>Select an Open Transaction</option>
+                          {% for transaction in open_transactions %}
+                            <option value="{{transaction.book.bookID}}-{{transaction.member.email}}">
+                              {{transaction.book.bookID}} issued to {{transaction.member.email}} on {{transaction.issue_date}}
+                            </option>
+                          {% endfor %}
+                        </select>
+                      </div>
+											<!-- <div class="form-group">
+                        <label>BookID</label>
+                        <input type="text" required name="bookID" class="form-control" placeholder="Enter bookID">  
+                      </div>
+											<div class="form-group">
+                        <label>Member Email</label>
+                        <input type="email" required name="email" class="form-control" placeholder="Enter email of the member">  
+                      </div> -->
+                      <button type="submit" class="btn btn-warning" style="margin-top: 20px;">Return</button>  
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mask d-flex align-items-center h-100" style="margin: 50px 0px;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card bg-dark shadow-2-strong">
+          <div class="card-body">
+            <div class="table-responsive">
+              <p style=" font-size: 40px;">List of Transactions</p>
+              <table class="table table-dark table-bordered mb-0 align-middle">
+                <thead class="align-middle">
+                  <tr>
+                    <th scope="col">Book ID</th>
+                    <th scope="col">Book Title</th>
+                    <th scope="col">Member Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Issue Date</th>
+                    <th scope="col">Return Date</th>
+                    <th scope="col">Rent Fee</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  {% for transaction in transactions %}
+                  <tr>
+                    <td scope="row">{{ transaction.book.bookID }}</td>
+                    <td>{{ transaction.book.title }}</td>
+                    <td>{{ transaction.member.first_name }} {{ transaction.member.last_name }}</td>
+                    <td>{{ transaction.member.email }}</td>
+										<td>{{ transaction.issue_date|date:"Y-m-d" }}</td>
+                    <td>{{ transaction.return_date|date:"Y-m-d" }}</td>
+                    <td>{{ transaction.rent_fee }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block start %}
+<div class="container mt-5">
+	<form class="col-6 mx-auto card p-3 shadow-lg" method="post">
+		{% csrf_token %}
+		<h2>{{ book.title }}</h2>
+		<hr>
+		<div class="form-group">
+				<label><strong>Stock</strong></label>
+				<input type="number" value="{{book.stock}}" required class="form-control" name="stock">
+		</div>
+		<button type="submit" class="btn btn-primary mt-3">Update</button>
+	</form>
+</div>
+
+{% endblock %}
+    
